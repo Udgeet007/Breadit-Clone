@@ -47,7 +47,16 @@ const Page: FC = () => {
           return loginToast();
         }
       }
+
+      toast({
+        title: "There was an error.",
+        description: "Could not create subreddit.",
+        variant: "destructive",
+      })
     },
+    onSuccess: (data) => {
+      router.push(`/r/${data}`)
+    }, 
   });
 
   return (
