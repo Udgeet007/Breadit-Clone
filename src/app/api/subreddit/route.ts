@@ -1,7 +1,7 @@
 import { getAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { SubredditValidator } from "@/lib/validators/subreddit";
-import z from "zod/lib";
+import z from "zod"
 
 export async function POST(req: Request) {
   try {

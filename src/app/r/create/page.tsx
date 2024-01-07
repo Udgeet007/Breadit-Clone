@@ -38,7 +38,7 @@ const Page: FC = () => {
         if (err.response?.status === 422) {
           return toast({
             title: "Invalid subreddit name.",
-            description: "Please choose a name between 3 and 21 character",
+            description: "Please choose a name between 3 and 21 characters.",
             variant: "destructive",
           });
         }
