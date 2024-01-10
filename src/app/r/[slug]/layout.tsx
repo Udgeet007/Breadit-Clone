@@ -1,53 +1,54 @@
 import SubscribeLeaveToggle from "@/components/SubscribeLeaveToggle";
 import { getAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { format } from 'date-fns'
+import { format } from "date-fns";
 import { notFound } from "next/navigation";
 
 const Layout = async ({
   children,
   params: { slug },
 }: {
-  children: React.ReactNode
-  params: { slug: string }
+  children: React.ReactNode;
+  params: { slug: string };
 }) => {
-  const session = await getAuthSession()
+  const session = await getAuthSession();
 
   const subreddit = await db.subreddit.findFirst({
-    where: { name: slug},
+    where: { name: slug },
     include: {
       posts: {
         include: {
           author: true,
-          votes:true,
+          votes: true,
         },
       },
     },
-  })
+  });
 
-  const subscription = !session?.user ? undefined : await db.subscription.findFirst({
-    where: {
-      subreddit: {
-        name: slug,
-      },
-      user: {
-        id: session.user.id,
-      },
-    },
-  })
+  const subscription = !session?.user
+    ? undefined
+    : await db.subscription.findFirst({
+        where: {
+          subreddit: {
+            name: slug,
+          },
+          user: {
+            id: session.user.id,
+          },
+        },
+      });
 
-  const isSubscribed = !!subscription
+  const isSubscribed = !!subscription;
 
-  if(!subreddit) return notFound()
+  if (!subreddit) return notFound();
 
   const memberCount = await db.subscription.count({
     where: {
       subreddit: {
-        name: slug,     
+        name: slug,
       },
     },
-  })
-
+  });
 
   return (
     <div className="sm:container max-w-7xl mx-auto h-full pt-12">
@@ -68,12 +69,12 @@ const Layout = async ({
                 <dt className="text-gray-500">Created</dt>
                 <dd className="text-gray-700">
                   <time dateTime={subreddit.createdAt.toDateString()}>
-                    {format(subreddit.createdAt, 'MMM d, yyyy')}
+                    {format(subreddit.createdAt, "MMM d, yyyy")}
                   </time>
                 </dd>
               </div>
 
-              <div className='flex justify-between gap-x-4 py-3'>
+              <div className="flex justify-between gap-x-4 py-3">
                 <dt className="text-gray-500">Members</dt>
                 <dd className="text-gray-700">
                   <div className="text-gray-900">{memberCount}</div>
@@ -87,7 +88,11 @@ const Layout = async ({
               ) : null}
 
               {subreddit.creatorId !== session?.user.id ? (
-                <SubscribeLeaveToggle />
+                <SubscribeLeaveToggle
+                  isSubscribed={ isSubscribed}
+                  subredditId={subreddit.id}
+                  subredditName={subreddit.name}
+                />
               ) : null}
             </dl>
           </div>
