@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation';
 
 
 
+
 interface pageProps {
   params: {
       slug: string
@@ -35,13 +36,15 @@ const page = async ({params}: pageProps) => {
 
   if(!subreddit) return notFound()
 
-  return <>
+  return (
+  <>
       <h1 className='font-bold text-3xl md:text-4xl h-14'>
         r/{subreddit.name}
       </h1>
       <MiniCreatePost session={session} />
       {/* TODO: Show posts in user feed  */}
   </>
+  )
 }
 
 export default page;

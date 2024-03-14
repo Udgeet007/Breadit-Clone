@@ -5,6 +5,7 @@ import  Navbar from '@/components/Navbar'
 import { Toaster } from '@/components/ui/Toaster'
 import Providers from '@/components/Providers'
 
+
 export const metadata = {
   title: 'Breadit',
   description: 'A Reddit clone built with Next.js and TypeScript.',
